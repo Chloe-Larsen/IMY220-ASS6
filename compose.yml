@@ -1,0 +1,6 @@
+services:
+  db:
+    image: mongo
+    container_name: photoshare_db
+    ports:
+      - "27017:27017"
