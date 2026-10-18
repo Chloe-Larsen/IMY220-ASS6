@@ -5,3 +5,39 @@ services:
     container_name: photoshare_db
     ports:
       - "27017:27017"
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: photoshare_api
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+    env_file:
+      - ./server/.env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: photoshare_client
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+    depends_on:
+      - api        
+
+volumes:
+  mongo_data:
