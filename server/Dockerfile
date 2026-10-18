@@ -1,6 +1,6 @@
 # Student Number: u25004141
 
-FROM Node:20-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 

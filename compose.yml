@@ -13,6 +13,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - photoshare_network 
 
   api:
     build:
@@ -27,6 +29,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    networks:
+      - photoshare_network 
 
   client:
     build:
@@ -37,7 +41,12 @@ services:
       - "5173:5173"
     restart: unless-stopped
     depends_on:
-      - api        
+      - api       
+    networks:
+      - photoshare_network 
 
 volumes:
   mongo_data:
+
+networks:
+  photoshare_network:
